@@ -1,0 +1,11 @@
+holidays
+nfl-data-py
+pandas
+numpy
+sodapy
+scikit-learn
+virtualenv
+minio
+great-expectations
+hopsworks
+hsfs

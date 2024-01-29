@@ -1,0 +1,7 @@
+#!/Users/shawarnawaz/PycharmProjects/pythonProject1/bart_rider_prediction/bin/python
+import json_merge_patch.cli
+json_merge_patch.cli.main()
+
+
+
+
