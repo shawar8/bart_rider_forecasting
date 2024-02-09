@@ -2,6 +2,7 @@ hopsworks_apikey = 'lPIbVKfTkToaMGO7.nzzpPmrIQJxuDP65YGlLIE8xWwwmbnLPVhfj0RBThGB
 feature_store_projectid = 'shawar8'
 feature_group_name = 'bart_features'
 expectation_suite_name = 'bart_feat_expectation_suite'
+feature_view_name='bart_training_data'
 features = ['date', 'data_input_time', 'day_of_week', 'is_gd', 'days_since_hol', 'is_hol',
             'month', 'day', 'is_weekend',
             'days_to_next_hol', 'days_since_gd', 'days_to_next_gd', 'max_temp',

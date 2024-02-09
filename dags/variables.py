@@ -23,14 +23,14 @@ rolling_avg_features = [target_column, 'max_temp', 'min_temp', 'total_rain', 'ra
                                'num_daylight_hours', 'max_wind_speed']
 current_year = datetime.now().year
 
-model_features = ['date', 'day_of_week', target_column, 'is_gameday', 'days_since_hol',
+model_features = ['day_of_week', target_column, 'is_gd', 'days_since_hol',
                   'days_to_next_hol', 'days_since_gd', 'days_to_next_gd', 'max_temp',
                   'min_temp', 'total_rain', 'rain_duration', 'num_daylight_hours',
                   'max_wind_speed', f'{target_column}_two_week_avg',
                   'max_temp_two_week_avg', 'min_temp_two_week_avg',
                   'total_rain_two_week_avg', 'rain_duration_two_week_avg',
                   'num_daylight_hours_two_week_avg', 'max_wind_speed_two_week_avg',
-                  'month', 'day', 'which_day', 'is_weekend']
+                  'month', 'day', 'is_hol', 'is_weekend']
 
 num_months_val = 4
 
