@@ -9,3 +9,5 @@ minio
 great-expectations
 hopsworks
 hsfs
+mlflow
+lightgbm
