@@ -4,7 +4,7 @@ from datetime import datetime
 
 url = 'data.sfgov.org'
 weather_url = 'https://archive-api.open-meteo.com/v1/archive'
-bart_data_apikey = 'u0VRfsXon8SEer7llsGibRtCM'
+bart_data_apikey = ''
 
 weather_params_req = OrderedDict({"temperature_2m_max": "max_temp",
                                   "temperature_2m_min": "min_temp",
@@ -48,7 +48,7 @@ model_parameters = {
 
 config = {
   "dest_bucket": "bart-passenger-prediction", # This will be auto created
-  "minio_endpoint": "10.0.0.44:9000",
-  "minio_username": "minioadmin",
-  "minio_password": "minioadmin",
+  "minio_endpoint": "",
+  "minio_username": "",
+  "minio_password": "",
 }
