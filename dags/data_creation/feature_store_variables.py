@@ -1,5 +1,5 @@
-hopsworks_apikey = 'lPIbVKfTkToaMGO7.nzzpPmrIQJxuDP65YGlLIE8xWwwmbnLPVhfj0RBThGBUv3Tneo8ZFtTXIVTAva5H'
-feature_store_projectid = 'shawar8'
+hopsworks_apikey = ''
+feature_store_projectid = ''
 feature_group_name = 'bart_features'
 expectation_suite_name = 'bart_feat_expectation_suite'
 features = ['date', 'data_input_time', 'day_of_week', 'is_gd', 'days_since_hol', 'is_hol',
