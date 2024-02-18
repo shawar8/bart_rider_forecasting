@@ -28,7 +28,12 @@ def get_days_count(df, nm, date_list):
 
     for idx in idx_req:
         curr_date = df.loc[idx, 'date']
-        next_dt = list(filter(lambda x: x > curr_date, date_list))[0]
+        # next_dt = list(filter(lambda x: x > curr_date, date_list))[0]
+        next_dt = list(filter(lambda x: x > curr_date, date_list))
+        if not next_dt:
+            next_dt = pd.to_datetime(f'{curr_date.year}-09-15')
+        else:
+            next_dt = next_dt[0]
         prev_dt = list(filter(lambda x: x < curr_date, date_list))[-1]
         # print (str(curr_date.date()), ' || ', next_hol, ' || ', prev_hol)
         df.loc[idx, f'next_{nm}'] = next_dt

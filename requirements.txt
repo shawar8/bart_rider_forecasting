@@ -11,3 +11,4 @@ hopsworks
 hsfs
 mlflow
 lightgbm
+streamlit

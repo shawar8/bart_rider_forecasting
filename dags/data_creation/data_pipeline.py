@@ -8,20 +8,12 @@
 # import numpy as np
 # import os
 
-from airflow.operators.python import get_current_context
-from airflow.models import Variable, xcom
 from airflow.decorators import task, dag
-from airflow.operators.python import PythonVirtualenvOperator
-
-import virtualenv
-from typing import List
+from airflow.utils.dates import days_ago
 
 ###### additional packages #######
 
 ###################################
-
-from sklearn.model_selection import TimeSeriesSplit
-from sklearn.metrics import mean_absolute_percentage_error as mape, mean_squared_error as rmse
 
 import warnings
 warnings.filterwarnings('ignore')
@@ -31,7 +23,7 @@ logging.basicConfig(level=logging.INFO)
 
 @dag(dag_id='Data_Pipeline',
      description='Read Data',
-     )
+     default_args={'start_date': days_ago(0)})
 def get_bart_data():
     @task.virtualenv(task_id='read_data_bart',
                      requirements=['sodapy', 'pandas', 'numpy', 'apache-airflow',
@@ -42,11 +34,8 @@ def get_bart_data():
         from datetime import datetime
 
         from data_creation.helper_functions import get_temporal_features, dump_data
-        from variables import config, original_target_column, target_column
-        import os
+        from variables import original_target_column, target_column
         import pandas as pd
-        import numpy as np
-        import pickle
         import logging
         logging.basicConfig(level=logging.INFO)
 
@@ -93,9 +82,6 @@ def get_bart_data():
         logging.basicConfig(level=logging.INFO)
         from datetime import datetime
         from data_creation.helper_functions import dump_data, get_data_from_minio
-        from variables import config
-        import os
-        import pickle
 
         data_req = get_data_from_minio('variables.pkl')
         current_year= datetime.now().year
@@ -196,7 +182,7 @@ def get_bart_data():
         from data_creation.helper_functions import dump_data, get_data_from_minio
         from datetime import datetime, timedelta
         import pandas as pd
-        from variables import model_features, rolling_avg_features
+        from variables import rolling_avg_features
 
         data_req = get_data_from_minio('variables.pkl')
         data_path = data_req['data_path']
@@ -221,7 +207,7 @@ def get_bart_data():
                                    'minio'])
     def upload_data_to_hopsworks():
         from data_creation.create_feature_store import upload_to_hopsworks, create_feature_view
-        from data_creation.helper_functions import dump_data, get_data_from_minio
+        from data_creation.helper_functions import get_data_from_minio
         from data_creation import feature_store_variables
         from data_creation.data_validation import build_expectations_suite
         from datetime import datetime, timedelta
@@ -239,18 +225,19 @@ def get_bart_data():
         data= data[feature_store_variables.features]
 
         start_date = end_date - timedelta(days=3*365)
+        data = data[(data['date'] <= end_date) & (data['date'] >= start_date)]
 
         logging.info('Building Expectation Suite')
         expectation_suite = build_expectations_suite()
         logging.info('Uploading data to Hopsworks')
+        logging.info(f'Size of dataframe: {data.shape}')
         upload_to_hopsworks(df=data, validation_expectation_suite=expectation_suite,
                             feature_group_version=1)
         logging.info('Creating Feature View')
         create_feature_view(feature_group_name= feature_store_variables.feature_group_name,
                             feature_group_version= 1,
-                            feature_view_name= 'bart_training_data',
-                            start_date= start_date,
-                            end_date= end_date)
+                            feature_view_name= 'bart_training_data'
+                            )
 
 
 

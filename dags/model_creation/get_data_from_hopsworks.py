@@ -1,7 +1,6 @@
 import hopsworks
 import sys
 sys.path.append('/Users/shawarnawaz/PycharmProjects/bart_rider_forecasting/dags')
-
 from datetime import timedelta
 from typing import Tuple, List
 import pandas as pd
@@ -40,10 +39,15 @@ def split_train_val(data: pd.DataFrame,
     data['date'] = pd.to_datetime(data['date'])
     # Getting the number of months we want to use as a test set
     last_date= data['date'].max()
+    last_month = last_date.month
+    last_year = last_date.year
+    if last_month == 1:
+        last_month = 12
+        last_year -= 1
     validation_thresh_date = last_date - timedelta(days= 30 * num_months_val)
     logging.info('Splitting the data into Train and Test')
     X_train = data[data['date'] < validation_thresh_date]
-    X_test = data[data['date'] >= validation_thresh_date]
+    X_test = data[(data['date'] >= validation_thresh_date) & (data['month'] <= last_month) & (data['date'].dt.year <= last_year)]
     X_train = X_train[model_features]
     X_test = X_test[model_features]
     # Creating the labels

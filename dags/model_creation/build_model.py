@@ -60,8 +60,7 @@ def objective(trial, x_train, y_train, x_test, y_test):
                   'num_leaves': trial.suggest_int('num_leaves', 10, 100, step = 10),
                   'learning_rate': trial.suggest_float('learning_rate', 0.01, 0.05, step = 0.01),
                   'colsample_bytree': trial.suggest_float('colsample_bytree', 0.5, 0.7, step = 0.2),
-                  'verbose': [-1],
-                  'n_jobs': [-1],
+                  'verbose': [-1]
                   }
         n_estim = params['n_estimators']
         # Passing the current parameters to the model
@@ -186,8 +185,8 @@ if __name__ == '__main__':
     except:
         logging.info(f'No model with name {experiment_name} present! Creating new model.')
     if not prev_model:
-        if mape < 0.15:
-            logging.info('Current MAPE < 0.15. Saving to Registry with Version -> 1 and tag -> STAGING')
+        if mape < 0.16:
+            logging.info('Current MAPE < 0.16. Saving to Registry with Version -> 1 and tag -> STAGING')
             mlflow.register_model(
                 f'runs:/{best_trial_id}/{artifact_path}',
                 experiment_name, tags=model_tags

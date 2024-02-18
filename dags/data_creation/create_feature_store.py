@@ -87,9 +87,7 @@ def upload_to_hopsworks(df: pd.DataFrame,
 
 def create_feature_view(feature_group_name: str,
                             feature_group_version: int,
-                            feature_view_name: str,
-                            start_date: pd.to_datetime,
-                            end_date: pd.to_datetime):
+                            feature_view_name: str):
     project= hopsworks.login(api_key_value= hopsworks_apikey,
                              project= feature_store_projectid)
     feature_store = project.get_feature_store()
@@ -118,12 +116,12 @@ def create_feature_view(feature_group_name: str,
             query=ds_query,
             labels=[]
         )
-    logging.info(f'Creating Dataset between {start_date} and {end_date}')
+    logging.info(f'Creating Training Dataset')
     feature_view.create_training_data(
             description='BART Light GBM Model Training Data',
             data_format='csv',
-            start_time=start_date,
-            end_time=end_date,
+            # start_time=start_date,
+            # end_time=end_date,
             write_options={"wait_for_job": True},
             coalesce=False
     )

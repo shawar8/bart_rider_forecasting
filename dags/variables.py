@@ -48,7 +48,7 @@ model_parameters = {
 
 config = {
   "dest_bucket": "bart-passenger-prediction", # This will be auto created
-  "minio_endpoint": "",
-  "minio_username": "",
-  "minio_password": "",
+  "minio_endpoint": "10.0.0.44:9000",
+  "minio_username": "minioadmin",
+  "minio_password": "minioadmin",
 }

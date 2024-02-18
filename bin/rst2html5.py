@@ -1,4 +1,4 @@
-#!/Users/shawarnawaz/PycharmProjects/pythonProject1/bart_rider_prediction/bin/python
+#!/Users/shawarnawaz/PycharmProjects/bart_rider_forecasting/bin/python3.10
 # :Copyright: © 2015 Günter Milde.
 # :License: Released under the terms of the `2-Clause BSD license`_, in short:
 #
