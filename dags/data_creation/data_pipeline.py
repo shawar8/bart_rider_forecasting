@@ -1,20 +1,5 @@
-# import sys
-# sys.path.append('.')
-# from variables import *
-# import data_creation.helper_functions
-# import json
-# from minio import Minio
-# import pandas as pd
-# import numpy as np
-# import os
-
 from airflow.decorators import task, dag
 from airflow.utils.dates import days_ago
-
-###### additional packages #######
-
-###################################
-
 import warnings
 warnings.filterwarnings('ignore')
 import logging
@@ -27,25 +12,29 @@ logging.basicConfig(level=logging.INFO)
 def get_bart_data():
     @task.virtualenv(task_id='read_data_bart',
                      requirements=['sodapy', 'pandas', 'numpy', 'apache-airflow',
-                                   'holidays', 'nfl_data_py', 'minio'])
+                                   'holidays', 'nfl_data_py', 'minio', 'python-dotenv'])
     def read_data():
-        from airflow.models import Variable
         from sodapy import Socrata
         from datetime import datetime
+        import os
+        import pandas as pd
+        from dotenv import load_dotenv
 
         from data_creation.helper_functions import get_temporal_features, dump_data
-        from variables import original_target_column, target_column
-        import pandas as pd
+        from variables import original_target_column, target_column, url
         import logging
         logging.basicConfig(level=logging.INFO)
 
         logging.info('Start')
-        url = Variable.get('url')
-        app_token = Variable.get('sfgov_token')
+        logging.info('Loading Environment Variables')
+        load_dotenv()
+        # url = Variable.get('url')
+        # app_token = Variable.get('sfgov_token')
+        app_token = os.getenv('BART_APIKEY')
         logging.info(url)
-        logging.info(app_token)
         current_year=datetime.now().year
-        stop = Variable.get('stop')
+        # stop = Variable.get('stop')
+        stop = original_target_column
         logging.info('Starting to read data')
         client = Socrata(url, app_token=app_token)
 
@@ -74,7 +63,7 @@ def get_bart_data():
 
     @task.virtualenv(task_id='get_nfl_data',
                      requirements=['nfl-data-py', 'pandas', 'numpy', 'apache-airflow',
-                                   'holidays', 'minio'])
+                                   'holidays', 'minio', 'python-dotenv'])
     def get_nfl_data():
         import nfl_data_py as nfl
         import pandas as pd
@@ -82,6 +71,7 @@ def get_bart_data():
         logging.basicConfig(level=logging.INFO)
         from datetime import datetime
         from data_creation.helper_functions import dump_data, get_data_from_minio
+        from dotenv import load_dotenv
 
         data_req = get_data_from_minio('variables.pkl')
         current_year= datetime.now().year
@@ -96,12 +86,13 @@ def get_bart_data():
 
     @task.virtualenv(task_id='calculate_hols_gamedays',
                      requirements=['pandas', 'holidays', 'nfl-data-py', 'numpy',
-                                   'minio'])
+                                   'minio', 'python-dotenv'])
     def calc_hols_and_gamedays():
         import holidays
         import pandas as pd
         from datetime import datetime
         from data_creation.helper_functions import get_days_count, dump_data, get_data_from_minio
+        from dotenv import load_dotenv
         import logging
         logging.basicConfig(level=logging.INFO)
 
@@ -125,7 +116,7 @@ def get_bart_data():
     @task.virtualenv(task_id='get_weather_data',
                      requirements=['pandas', 'holidays', 'nfl-data-py', 'numpy',
                                    'minio', 'requests_cache', 'retry_requests',
-                                   'openmeteo_requests'])
+                                   'openmeteo_requests', 'python-dotenv'])
     def get_weather_data():
         import openmeteo_requests
         import requests_cache
@@ -134,6 +125,7 @@ def get_bart_data():
         from data_creation.helper_functions import dump_data, get_data_from_minio
         from variables import features_required, weather_params_req, weather_url
         from datetime import timedelta
+        from dotenv import load_dotenv
         import logging
         logging.basicConfig(level=logging.INFO)
 
@@ -177,11 +169,12 @@ def get_bart_data():
 
     @task.virtualenv(task_id='get_rolling_features',
                      requirements=['pandas', 'holidays', 'nfl-data-py', 'numpy',
-                                   'minio'])
+                                   'minio', 'python-dotenv'])
     def get_rolling_features():
         from data_creation.helper_functions import dump_data, get_data_from_minio
         from datetime import datetime, timedelta
         import pandas as pd
+        from dotenv import load_dotenv
         from variables import rolling_avg_features
 
         data_req = get_data_from_minio('variables.pkl')
@@ -204,7 +197,7 @@ def get_bart_data():
     @task.virtualenv(task_id='upload_data_to_hopsworks',
                      requirements=['hsfs', 'hopsworks', 'great_expectations',
                                    'pandas', 'numpy', 'holidays', 'nfl-data-py',
-                                   'minio'])
+                                   'minio', 'python-dotenv'])
     def upload_data_to_hopsworks():
         from data_creation.create_feature_store import upload_to_hopsworks, create_feature_view
         from data_creation.helper_functions import get_data_from_minio

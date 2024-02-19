@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 import hopsworks
 from great_expectations.core import ExpectationSuite
@@ -6,10 +7,14 @@ from hsfs.feature_group import FeatureGroup
 from data_creation.data_validation import build_expectations_suite
 from data_creation.feature_store_variables import *
 import variables
+from dotenv import load_dotenv
 import logging
 logging.basicConfig(level=logging.INFO)
 
 
+load_dotenv()
+hopsworks_apikey = os.getenv('HOPSWORKS_APIKEY')
+feature_store_projectid = os.getenv('FEATURE_STORE_PROJECTID')
 def upload_to_hopsworks(df: pd.DataFrame,
                         validation_expectation_suite: ExpectationSuite,
                         feature_group_version: int):

@@ -1,5 +1,3 @@
-hopsworks_apikey = 'lPIbVKfTkToaMGO7.nzzpPmrIQJxuDP65YGlLIE8xWwwmbnLPVhfj0RBThGBUv3Tneo8ZFtTXIVTAva5H'
-feature_store_projectid = 'shawar8'
 feature_group_name = 'bart_features'
 expectation_suite_name = 'bart_feat_expectation_suite'
 feature_view_name='bart_training_data'

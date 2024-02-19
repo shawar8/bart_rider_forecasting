@@ -3,12 +3,20 @@ import numpy as np
 import os
 import holidays
 import nfl_data_py as nfl
-from variables import config
+# from variables import config
 from minio import Minio
 import pickle
+from dotenv import load_dotenv
+load_dotenv()
 import logging
 logging.basicConfig(level=logging.INFO)
 
+
+load_dotenv()
+minio_bucket = os.getenv('MINIO_BUCKET')
+minio_endpoint =os.getenv('MINIO_ENDPOINT')
+minio_username = os.getenv('MINIO_USERNAME')
+minio_password = os.getenv('MINIO_PASSOWRD')
 
 def get_temporal_features(date):
     year = date.year
@@ -59,11 +67,11 @@ def get_num_days(dt, nfl_dates):
 
 def dump_data(data, dest_filname: str, source_file: str, is_index:bool=False):
     logging.info('Creating Client')
-    minio_client = Minio(config["minio_endpoint"], secure= False,
-                   access_key=config["minio_username"],
-                   secret_key=config["minio_password"])
+    minio_client = Minio(minio_endpoint, secure= False,
+                   access_key=minio_username,
+                   secret_key=minio_password)
     logging.info('Created Client')
-    bucket_name=config['dest_bucket']
+    bucket_name=minio_bucket
     logging.info('Checking to see if bucket exists')
     found=minio_client.bucket_exists(bucket_name)
     if not found:
@@ -86,11 +94,11 @@ def dump_data(data, dest_filname: str, source_file: str, is_index:bool=False):
 
 def get_data_from_minio(filename):
     logging.info('Creating Client')
-    minio_client = Minio(config["minio_endpoint"], secure=False,
-                         access_key=config["minio_username"],
-                         secret_key=config["minio_password"])
+    minio_client = Minio(minio_endpoint, secure=False,
+                         access_key=minio_username,
+                         secret_key=minio_password)
     logging.info('Created Client')
-    bucket_name = config['dest_bucket']
+    bucket_name = minio_bucket
     logging.info('Downloading Data')
     ext = filename[-3:]
     minio_client.fget_object(bucket_name, filename, filename)
