@@ -16,7 +16,8 @@ Data Sources:
 - Holiday Data - [https://pypi.org/project/holidays]()
 
 <p>
-    <b>***NOTES: Right now the workflow is set for the data pipeline, model training pipeline and the serving pipeline. Some of the credential info is saved within the AirflowUI itself or in the .py files. THIS IS NOT BEST PRACTICE, however it is a placeholder for now. More info on this below.
+    <b>
+***NOTES: Right now the workflow is set for the data pipeline, model training pipeline and the serving pipeline. 
 I will be incorporating the monitoring and retraining pipelines soon.
 
 I will also be working on containerizing everything sometime in the near future.***
@@ -45,13 +46,15 @@ Data Pipeline steps:
   - One of the packages is Minio. I used this to store data. You'll need to run the minio server by -> minio server 'path/to/dag/folder'
   - The feature store I used to store the processed data is Hopsworks. You'll need to create an account and store the API key to use it. Follow the instructions here -> [https://docs.hopsworks.ai/3.5/user_guides/projects/auth/registration]()
   - You'll also need an APP token to download the BART data. Follow the instructions here -> [https://data.sfgov.org/login]()
-  - <b>**NOTE: Most of the credential info I've needed, I've either placed in the dags/data_creation/feature_store_variables.py file, or stored as a variable in Airflow itelf. THIS IS NOT GOOD PRACTICE. I've done it this way for now as a placeholder and will replace it soon. You can change this too by either using a secret manager or a .dot.env file ([https://configu.com/blog/dotenv-managing-environment-variables-in-node-python-php-and-more]())**</b>
-  - The data I've stored in Airflow itself are: BART App token, BART data URL, the BART stop for which I trained the model.
-  - The other credentials I've stored in the dags/data_creation/feature_store_variables.py are the hopsworks API key and the names for the hopsworks feature groups, feature views etc.
-  - Your minio credentials will go into the variables.py file.
-  - To set the required variables on Airflow, go to the web browser and open 127.0.0.1:8080 to view the Airflow console.
-  - Click on the Admin tab and select Variables, then click on the + button and enter a key, value and an optional description for your Airflow variable.
-  - The key value pairs are  {'url': 'data.sfgov.org', 'sfgov_token': your sf gov app token, 'stop': stop name you want to run the model for}
+  - Next, we'll need to create all the credential variables. Create a .env file in the root folder of the project. In the .env file, you'll set the required credential variables as follows:-
+    - BART_APIKEY = <The app token for retrieving the BART data>
+    - MINIO_BUCKET = <The bucket name where you will store the intermediate data>
+    - MINIO_ENDPOINT = <The IP address you get when you start the minio server>
+    - MINIO_USERNAME = <The minio username you want to set>
+    - MINIO_PASSWORD = <The minio password you want to set>
+    - FEATURE_STORE_PROJECTID = <The project id you created on Hopsworks>
+    - HOPSWORKS_APIKEY = <The hopsworks api key you get when you create an account on hopsworks>
+  - Remember to add .env to the .gitignore file. This will prevent the .env file being pushed to your branch on github.
   - To understand more about the BART stop, follow the link -> [https://data.sfgov.org/Transportation/BART-Daily-Station-Exits/m2xz-p7ja/about_data]()
   - Once you're ready, run the data pipeline with python path/to/data_pipeline.py. Then go to the UI, click on DAGS, click on the 'Active' tab. Click Play.
   - Once the pipeline runs, you should see the data in the Hopsworks feature store.
