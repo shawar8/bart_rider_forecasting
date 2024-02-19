@@ -47,13 +47,13 @@ Data Pipeline steps:
   - The feature store I used to store the processed data is Hopsworks. You'll need to create an account and store the API key to use it. Follow the instructions here -> [https://docs.hopsworks.ai/3.5/user_guides/projects/auth/registration]()
   - You'll also need an APP token to download the BART data. Follow the instructions here -> [https://data.sfgov.org/login]()
   - Next, we'll need to create all the credential variables. Create a .env file in the root folder of the project. In the .env file, you'll set the required credential variables as follows:-
-    - BART_APIKEY = <The app token for retrieving the BART data>
-    - MINIO_BUCKET = <The bucket name where you will store the intermediate data>
-    - MINIO_ENDPOINT = <The IP address you get when you start the minio server>
-    - MINIO_USERNAME = <The minio username you want to set>
-    - MINIO_PASSWORD = <The minio password you want to set>
-    - FEATURE_STORE_PROJECTID = <The project id you created on Hopsworks>
-    - HOPSWORKS_APIKEY = <The hopsworks api key you get when you create an account on hopsworks>
+    - BART_APIKEY = *The app token for retrieving the BART data*
+    - MINIO_BUCKET = *The bucket name where you will store the intermediate data*
+    - MINIO_ENDPOINT = *The IP address you get when you start the minio server*
+    - MINIO_USERNAME = *The minio username you want to set*
+    - MINIO_PASSWORD = *The minio password you want to set*
+    - FEATURE_STORE_PROJECTID = *The project id you created on Hopsworks*
+    - HOPSWORKS_APIKEY = *The hopsworks api key you get when you create an account on hopsworks*
   - Remember to add .env to the .gitignore file. This will prevent the .env file being pushed to your branch on github.
   - To understand more about the BART stop, follow the link -> [https://data.sfgov.org/Transportation/BART-Daily-Station-Exits/m2xz-p7ja/about_data]()
   - Once you're ready, run the data pipeline with python path/to/data_pipeline.py. Then go to the UI, click on DAGS, click on the 'Active' tab. Click Play.
