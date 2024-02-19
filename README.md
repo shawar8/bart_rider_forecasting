@@ -25,7 +25,7 @@ I will also be working on containerizing everything sometime in the near future.
 </p>
 
 Once you run the entire pipeline, this is what the forecasting results look like on the UI.
-![](/Users/shawarnawaz/Desktop/forecasting_results.png)
+<img src="/Users/shawarnawaz/Desktop/forecasting_results.png"/>
 
 Data Pipeline steps:
 - Set up Airflow by following the steps:
