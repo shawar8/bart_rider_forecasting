@@ -6,9 +6,11 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import mean_squared_error, mean_absolute_error, mean_absolute_percentage_error
 import numpy as np
 import optuna
+from dotenv import load_dotenv
+import os
 import sys
 sys.path.append('/Users/shawarnawaz/PycharmProjects/bart_rider_forecasting/dags')
-from data_creation.feature_store_variables import *
+from data_creation.feature_store_variables import feature_view_name
 from model_creation.model_variables import *
 from model_creation.get_data_from_hopsworks import get_feature_view_data, split_train_val
 from variables import target_column, model_features
@@ -133,6 +135,10 @@ def run_hyperopt(experiment_id, tag_name, run_name, study_name, model_type):
 
 if __name__ == '__main__':
     best_trial = None
+    logging.info('Acquiring Environment Variables')
+    load_dotenv()
+    hopsworks_apikey = os.getenv('HOPSWORKS_APIKEY')
+    feature_store_projectid = os.getenv('FEATURE_STORE_PROJECTID')
     fv, data, md = get_feature_view_data(fs_project_name=feature_store_projectid,
                                          fs_apikey=hopsworks_apikey,
                                          fv_name=feature_view_name,

@@ -8,6 +8,8 @@ import openmeteo_requests
 import requests_cache
 from retry_requests import retry
 import streamlit as st
+import os
+from dotenv import load_dotenv
 
 import numpy as np
 import sys
@@ -15,7 +17,7 @@ sys.path.append('/Users/shawarnawaz/PycharmProjects/bart_rider_forecasting/dags'
 from model_creation.get_data_from_hopsworks import get_feature_view_data
 from model_creation.model_variables import *
 from data_creation.helper_functions import get_temporal_features
-from data_creation.feature_store_variables import *
+from data_creation.feature_store_variables import feature_view_name
 from variables import *
 from visualization.data_visualization import plot_line_plot
 import logging
@@ -57,6 +59,9 @@ if __name__ == '__main__':
     startup_placeholder = st.empty()
     calc_placeholder = st.sidebar.empty()
     startup_placeholder.write('Please wait while console loads.')
+    load_dotenv()
+    feature_store_projectid = os.getenv('FEATURE_STORE_PROJECTID')
+    hopsworks_apikey = os.getenv('HOPSWORKS_APIKEY')
     logging.info(f'Initializing client: {tracking_uri}')
     client = MlflowClient(tracking_uri=tracking_uri)
     model = get_model(experiment_name=experiment_name, client=client)
@@ -70,7 +75,7 @@ if __name__ == '__main__':
     max_date = data['date'].max()
     min_req_date = max_date - timedelta(days=14)
     start = datetime.now() + timedelta(days=1)
-    end = pd.to_datetime('2024-02-18')
+    end = pd.to_datetime('2024-02-19')
     startup_placeholder.empty()
     end_date = choose_start_end_time(start, end, calc_placeholder)
     if end_date:

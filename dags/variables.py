@@ -4,8 +4,6 @@ from datetime import datetime
 
 url = 'data.sfgov.org'
 weather_url = 'https://archive-api.open-meteo.com/v1/archive'
-bart_data_apikey = ''
-
 weather_params_req = OrderedDict({"temperature_2m_max": "max_temp",
                                   "temperature_2m_min": "min_temp",
                                   "precipitation_sum": "total_rain",
@@ -33,8 +31,6 @@ model_features = ['day_of_week', target_column, 'is_gd', 'days_since_hol',
                   'month', 'day', 'is_hol', 'is_weekend']
 
 num_months_val = 4
-
-
 model_parameters = {
         "max_depth": [3, 4, 5, 6, 10],
         "num_leaves": [10, 20, 30, 40, 100],
@@ -45,10 +41,3 @@ model_parameters = {
         "n_jobs": [-1],
         "random_state": [42]
     }
-
-config = {
-  "dest_bucket": "bart-passenger-prediction", # This will be auto created
-  "minio_endpoint": "10.0.0.44:9000",
-  "minio_username": "minioadmin",
-  "minio_password": "minioadmin",
-}

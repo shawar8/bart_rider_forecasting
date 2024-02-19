@@ -12,3 +12,4 @@ hsfs
 mlflow
 lightgbm
 streamlit
+python-dotenv
